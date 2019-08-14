@@ -19,14 +19,21 @@ def generateStore(selectedStore):
     # Generating a name for the store
     # Give the store a description
     # Give the store npc's
-    # Generate an NPC
+
+    # Selecting a random number of npcs to generate and generating them
+    # TODO: Beautify this in the future
+    num_of_npc = random.randint(1, 3)
+    print(num_of_npc)
+    while num_of_npc > 0:
+        temp = npc_generator.generateNPC()
+        generatedStore.append(temp)
+        num_of_npc -= 1
+
     # Generate items for the store
     # Getting the number of items requested
     # Generating items
     # Send all the information to a beautifier
     # Send data back to main to be printed
-
-
     return None
 
 
