@@ -1,4 +1,5 @@
 import store_generator as storegen
+import npc_generator as npcgen
 # import mysql.connector
 
 
@@ -27,5 +28,7 @@ selectedGenerator = int(selectedGenerator)
 
 if selectedGenerator == 1:
     storegen.main()
+elif selectedGenerator == 2:
+    npcgen.main()
 else:
     print('No such generator exists! Exiting for now...')

@@ -5,7 +5,7 @@
 
 # Imports
 import npc_generator
-import math
+import random
 
 # Store generator
 # Varaibles
@@ -17,25 +17,15 @@ generatedStore = []
 def generateStore(selectedStore):
     # Create name of the store
     # Generating a name for the store
-    storeName = 'Names to be added'
-    generatedStore.append(storeName)
-
     # Give the store a description
-    storeDescription = 'To be added'
-    generatedStore.append(storeDescription)
-
     # Give the store npc's
     # Generate an NPC
-    generatedStore.append(npc_generator.main())
-
     # Generate items for the store
     # Getting the number of items requested
-    item_count = selectedStore[1]
-
     # Generating items
-
     # Send all the information to a beautifier
     # Send data back to main to be printed
+
 
     return None
 
