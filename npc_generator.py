@@ -2,8 +2,8 @@
 import random
 import linecache
 import sqlite3
-from sqlite3 import Error
 import re
+import webcolors
 
 # Gonna start of with a simple npc generator and then over time make it more
 # complex and sofisticated.
@@ -17,7 +17,6 @@ npc = {
     'Gender': '',
     'Race': '',
     'Age': '',
-    'Hair color': '',
     'Height': '',
     'Weight': ''
 }
@@ -32,8 +31,6 @@ norm_races = {
     'Half-orc': 75,
     'Teifling': 100
 }
-
-all_races = []
 
 
 def get_name():
@@ -54,23 +51,38 @@ def get_name():
 
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#                                 NPC GENERATION
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#                                 NPC GENERATION                              #
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 # TODO: Randomize the default sleection as well
 def generateNPC(gender, race):
 
     # Get a name for the npc
     get_name()
 
-    # Generate various details for the NPC in the order
-    # **************************************************
-    # *   Race
-    # *   Age
-    # *   Hair color
-    # *   Height
-    # *   Weight
-    # **************************************************
+    # Connecting to the dataase
+    conn = sqlite3.connect('data/FantasyGeneratorDB.db')
+    c = conn.cursor()
 
+
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#                                 GENDER GENERATION
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    if len(gender) == 0:
+        x = random.randint(1, 7)
+        if x < 3:
+            npc['Gender'] = 'Male'
+        else:
+            npc['Gender'] = 'Female'
+    else:
+        npc['Gender'] = gender
+
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#                                 RACE GENERATION
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # Generating Race
     # TODO: Allow for a larger selection of races
     npc['Race'] = race
@@ -78,16 +90,48 @@ def generateNPC(gender, race):
         race = random.choice(list(norm_races))
     npc['Race'] = race
 
-    # Connecting to the dataase
-    conn = sqlite3.connect('data/FantasyGeneratorDB.db')
-    c = conn.cursor()
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#                                 AGE GENERATION
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
     # Generating age
     # TODO: Maybe setup a max age possible
     npc['Age'] = random.randint(10, norm_races[race])
-    # TODO: Generate hair color
-    # TODO: Generate Weight
 
-    # TODO: Generate Height
+
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#                                 WEIGHT GENERATION
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # TODO: Setup exception for *1
+    # Getting weight data according to race and cleaning it up for use
+
+    query = f"SELECT Base_Weight FROM races WHERE Race = '{race}'"
+    c.execute(query)
+    base_weight = str(c.fetchone())
+    base_weight = re.sub("[^0-9]", "", base_weight)
+    print(base_weight)
+
+    query = f"SELECT Weight_Modfier FROM races WHERE Race = '{race}'"
+    c.execute(query)
+    mod_weight = str(c.fetchone())
+    mod_weight = mod_weight.strip("'(),")
+
+    # Calculating weight and appending to dict
+    base_weight = int(base_weight)
+    x = mod_weight[1]
+    x = int(x)
+    y = int(mod_weight[3:])
+
+    weight = base_weight + (x * random.randint(1, (y + 1)))
+
+    npc['Weight'] = weight
+
+
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#                                 HEIGHT GENERATION
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    # Generating Height
     # Getting height data according to race and cleaning it up for use
 
     query = f"SELECT Base_Height FROM races WHERE Race = '{race}' "
@@ -95,12 +139,10 @@ def generateNPC(gender, race):
     base_height = str(c.fetchone())
     base_height = re.sub("[^0-9]", "", base_height)
 
-    print(base_height)
     query = f"SELECT Height_Modfier FROM races WHERE Race = '{race}'"
     c.execute(query)
     mod_height = str(c.fetchone())
     mod_height = mod_height.strip("'(),")
-    print(mod_height)
 
     # Calculating the actual age and appending to the dict
     base_height = int(base_height)
@@ -108,7 +150,7 @@ def generateNPC(gender, race):
     x = int(x)
     y = int(mod_height[3:])
 
-    height = base_height + (x * random.randint(1, (y+1)))
+    height = base_height + (x * random.randint(1, (y + 1)))
 
     npc['Height'] = height
 
