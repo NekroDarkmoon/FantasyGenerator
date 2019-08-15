@@ -6,7 +6,7 @@ from sqlite3 import Error
 # Starting off as main class getting data from other classes
 
 # Varaibles
-availableGenerators = []
+availableGenerators = ['NPC generator', 'Store Generator']
 selectedGenerator = None
 
 
@@ -27,13 +27,19 @@ def create_connection(db_file):
 
 # Running the program
 # TODO: Swtich to always on unless told to quit.
-print('Select a generator from the following: \n' + '1. Shop Generator\n')
-selectedGenerator = input('Choice as a number: ')
+
+print('Select a store type:\n')
+count = 1
+for gen in availableGenerators:
+    print(str(count) + ': ' + gen)
+    count += 1
+
+selectedGenerator = input('\nChoice as a number: ')
 selectedGenerator = int(selectedGenerator)
 
 if selectedGenerator == 1:
-    storegen.main()
-elif selectedGenerator == 2:
     npcgen.main()
+elif selectedGenerator == 2:
+    storegen.main()
 else:
     print('No such generator exists! Exiting for now...')

@@ -3,7 +3,6 @@ import random
 import linecache
 import sqlite3
 import re
-import webcolors
 
 # Gonna start of with a simple npc generator and then over time make it more
 # complex and sofisticated.
@@ -109,7 +108,6 @@ def generateNPC(gender, race):
     c.execute(query)
     base_weight = str(c.fetchone())
     base_weight = re.sub("[^0-9]", "", base_weight)
-    print(base_weight)
 
     query = f"SELECT Weight_Modfier FROM races WHERE Race = '{race}'"
     c.execute(query)
@@ -118,11 +116,14 @@ def generateNPC(gender, race):
 
     # Calculating weight and appending to dict
     base_weight = int(base_weight)
-    x = mod_weight[1]
-    x = int(x)
-    y = int(mod_weight[3:])
 
-    weight = base_weight + (x * random.randint(1, (y + 1)))
+    if mod_weight == '*1':
+        weight = base_weight + (random.randint(-11, 11))
+    else:
+        x = mod_weight[1]
+        x = int(x)
+        y = int(mod_weight[3:])
+        weight = base_weight + (x * random.randint(1, (y + 1)))
 
     npc['Weight'] = weight
 
@@ -164,6 +165,17 @@ def generateNPC(gender, race):
 def main():
     # Get input on the type of NPC that is to be generated
 
-    gender = input('Would you like the NPC to be (M)ale or (Female): ')
+    gender = input('Would you like the NPC to be (M)ale or (F)emale: ')
     race = input('What race would you like to choose: ')
-    print(generateNPC(gender, race))
+    generateNPC(gender, race)
+
+    print(f"""
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name:   {npc['First Name']} {npc['Last Name']}
+Gender: {npc['Gender']}
+Race:   {npc['Race']}
+Age:    {npc['Age']}
+Height: {npc['Height']}cm
+Weight: {npc['Weight']}kg
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        """)
