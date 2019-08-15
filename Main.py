@@ -1,27 +1,32 @@
 import store_generator as storegen
 import npc_generator as npcgen
-# import mysql.connector
-
+import sqlite3
+from sqlite3 import Error
 
 # Starting off as main class getting data from other classes
-
-# # Establishing a database
-# mydb = mysql.connector.connect(
-#     host="localhost",
-#     user1="admin",
-#     psswd="nada"
-# )
-#
-# mycursor = mydb.cursor()
-# mycursor.execute("CREATE DATABASE FantasyGenerator")
-#
 
 # Varaibles
 availableGenerators = []
 selectedGenerator = None
 
+
+# Creating the connection to the database
+def create_connection(db_file):
+    try:
+        conn = sqlite3.connect(db_file)
+        return conn
+    except Error as e:
+        print(e)
+
+    return None
+
+
 # Presenting choices on what to generate
 # Displaying the generator
+# create_connection('data/FantasyGeneratorDB.db')
+
+# Running the program
+# TODO: Swtich to always on unless told to quit.
 print('Select a generator from the following: \n' + '1. Shop Generator\n')
 selectedGenerator = input('Choice as a number: ')
 selectedGenerator = int(selectedGenerator)

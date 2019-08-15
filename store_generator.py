@@ -25,7 +25,7 @@ def generateStore(selectedStore):
     num_of_npc = random.randint(1, 3)
     print(num_of_npc)
     while num_of_npc > 0:
-        temp = npc_generator.generateNPC()
+        temp = npc_generator.generateNPC('', '')
         generatedStore.append(temp)
         num_of_npc -= 1
 

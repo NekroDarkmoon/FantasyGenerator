@@ -1,6 +1,9 @@
 # Imports
 import random
 import linecache
+import sqlite3
+from sqlite3 import Error
+import re
 
 # Gonna start of with a simple npc generator and then over time make it more
 # complex and sofisticated.
@@ -50,15 +53,11 @@ def get_name():
     return None
 
 
-def gen_age(race):
-    return None
-
-
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #                                 NPC GENERATION
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # TODO: Randomize the default sleection as well
-def generateNPC(gender="M", race="Human"):
+def generateNPC(gender, race):
 
     # Get a name for the npc
     get_name()
@@ -75,14 +74,46 @@ def generateNPC(gender="M", race="Human"):
     # Generating Race
     # TODO: Allow for a larger selection of races
     npc['Race'] = race
+    if len(race) == 0:
+        race = random.choice(list(norm_races))
+    npc['Race'] = race
 
+    # Connecting to the dataase
+    conn = sqlite3.connect('data/FantasyGeneratorDB.db')
+    c = conn.cursor()
     # Generating age
-    # TODO: Create a seperate function to calculate age in accordance to race.
-    npc['Age'] = random.randint(16, 80)
-
+    # TODO: Maybe setup a max age possible
+    npc['Age'] = random.randint(10, norm_races[race])
     # TODO: Generate hair color
     # TODO: Generate Weight
+
     # TODO: Generate Height
+    # Getting height data according to race and cleaning it up for use
+
+    query = f"SELECT Base_Height FROM races WHERE Race = '{race}' "
+    c.execute(query)
+    base_height = str(c.fetchone())
+    base_height = re.sub("[^0-9]", "", base_height)
+
+    print(base_height)
+    query = f"SELECT Height_Modfier FROM races WHERE Race = '{race}'"
+    c.execute(query)
+    mod_height = str(c.fetchone())
+    mod_height = mod_height.strip("'(),")
+    print(mod_height)
+
+    # Calculating the actual age and appending to the dict
+    base_height = int(base_height)
+    x = mod_height[1]
+    x = int(x)
+    y = int(mod_height[3:])
+
+    height = base_height + (x * random.randint(1, (y+1)))
+
+    npc['Height'] = height
+
+    # Closing the connection
+    conn.close()
 
     # Returning the NPC
     return npc
