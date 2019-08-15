@@ -27,7 +27,7 @@ norm_races = {
     'Dragonborn': 80,
     'Gnome': 500,
     'Half-Elf': 180,
-    'Half-orc': 75,
+    'Half-Orc': 75,
     'Teifling': 100
 }
 
@@ -55,7 +55,6 @@ def get_name():
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-# TODO: Randomize the default sleection as well
 def generateNPC(gender, race):
 
     # Get a name for the npc
@@ -101,7 +100,6 @@ def generateNPC(gender, race):
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #                                 WEIGHT GENERATION
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    # TODO: Setup exception for *1
     # Getting weight data according to race and cleaning it up for use
 
     query = f"SELECT Base_Weight FROM races WHERE Race = '{race}'"
@@ -115,6 +113,7 @@ def generateNPC(gender, race):
     mod_weight = mod_weight.strip("'(),")
 
     # Calculating weight and appending to dict
+
     base_weight = int(base_weight)
 
     if mod_weight == '*1':
@@ -166,6 +165,7 @@ def main():
     # Get input on the type of NPC that is to be generated
 
     gender = input('Would you like the NPC to be (M)ale or (F)emale: ')
+    # TODO: Add a list to choose from in the future
     race = input('What race would you like to choose: ')
     generateNPC(gender, race)
 
