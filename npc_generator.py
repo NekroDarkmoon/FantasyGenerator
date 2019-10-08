@@ -167,7 +167,22 @@ def main():
     # Get input on the type of NPC that is to be generated
     gender = input('Would you like the NPC to be (M)ale or (F)emale: ')
     # TODO: Add a list to choose from in the future
-    race = input('What race would you like to choose: ')
+
+    choice_exists = False
+
+    while choice_exists is False:
+        print('What race would you like to choose? Leave empty for random: ')
+        for race in norm_races:
+            print(race)
+        chosen_race = input('Choice: ')
+
+        for race in norm_races:
+            if (chosen_race == race) | (len(chosen_race) == 0):
+                choice_exists = True
+                break
+
+        if choice_exists is False:
+            print("Chosen race doesn't exist...\n\n")
 
     npc_number = input("Number of npc's to generate: ")
 
@@ -179,7 +194,7 @@ def main():
 
     pos = 0
     while pos < npc_number:
-        generateNPC(gender, race)
+        generateNPC(gender, chosen_race)
         print(f"""
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Name:   {npc['First Name']} {npc['Last Name']}
