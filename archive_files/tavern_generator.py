@@ -83,6 +83,8 @@ def tavern_generator():
     # TODO: Clientle
     # TODO: Accomodations
     # TODO: Food
+    # Generating food
+
     # TODO: Drinks
 
 

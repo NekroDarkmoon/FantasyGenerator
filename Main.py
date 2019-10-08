@@ -1,4 +1,3 @@
-import store_generator as storegen
 import npc_generator as npcgen
 import sqlite3
 from sqlite3 import Error
@@ -28,18 +27,21 @@ def create_connection(db_file):
 # Running the program
 # TODO: Swtich to always on unless told to quit.
 
-print('Select a store type:\n')
-count = 1
-for gen in availableGenerators:
-    print(str(count) + ': ' + gen)
-    count += 1
+# print('Select a store type:\n')
+# count = 1
+# for gen in availableGenerators:
+#     print(str(count) + ': ' + gen)
+#     count += 1
+#
+# selectedGenerator = input('\nChoice as a number: ')
+# selectedGenerator = int(selectedGenerator)
+#
+# if selectedGenerator == 1:
+#     npcgen.main()
+# elif selectedGenerator == 2:
+#     storegen.main()
+# else:
+#     print('No such generator exists! Exiting for now...')
 
-selectedGenerator = input('\nChoice as a number: ')
-selectedGenerator = int(selectedGenerator)
-
-if selectedGenerator == 1:
-    npcgen.main()
-elif selectedGenerator == 2:
-    storegen.main()
-else:
-    print('No such generator exists! Exiting for now...')
+print('NPC Generator')
+npcgen.main()

@@ -10,6 +10,7 @@ import re
 # Variables
 f_names = 'data/name_dict2.txt'
 gen_num = 0
+npc_number = 1
 npc = {
     'First Name': '',
     'Last Name': '',
@@ -28,7 +29,7 @@ norm_races = {
     'Gnome': 500,
     'Half-Elf': 180,
     'Half-Orc': 75,
-    'Teifling': 100
+    'Tiefling': 100
 }
 
 
@@ -162,14 +163,24 @@ def generateNPC(gender, race):
 
 
 def main():
-    # Get input on the type of NPC that is to be generated
 
+    # Get input on the type of NPC that is to be generated
     gender = input('Would you like the NPC to be (M)ale or (F)emale: ')
     # TODO: Add a list to choose from in the future
     race = input('What race would you like to choose: ')
-    generateNPC(gender, race)
 
-    print(f"""
+    npc_number = input("Number of npc's to generate: ")
+
+    # Loop condition satisfier
+    if(len((npc_number)) == 0):
+        npc_number = 1
+    else:
+        npc_number = int(npc_number)
+
+    pos = 0
+    while pos < npc_number:
+        generateNPC(gender, race)
+        print(f"""
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Name:   {npc['First Name']} {npc['Last Name']}
 Gender: {npc['Gender']}
@@ -179,3 +190,4 @@ Height: {npc['Height']}cm
 Weight: {npc['Weight']}kg
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         """)
+        pos += 1
