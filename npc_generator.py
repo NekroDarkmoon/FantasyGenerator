@@ -19,7 +19,9 @@ npc = {
     'Age': '',
     'Height': '',
     'Weight': '',
-    'Stats': '',
+    'Type': '',
+    'abilities': [],
+    'Abilities': []
 }
 norm_races = {
     'Human': 90,
@@ -57,7 +59,7 @@ def get_name():
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-def generateNPC(gender, race, type):
+def generateNPC(gender, race, is_adventurer):
 
     # Get a name for the npc
     get_name()
@@ -164,24 +166,29 @@ def generateNPC(gender, race, type):
 #                              ABILITY GENERATION
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    # Assigning the variable
-    if type.lower() == 'y':
-        is_commoner = False
-    else:
-        is_commoner = True
-
     # Seeing if the npc is an adventurer
-    if is_commoner is True:
-        print(is_commoner)
+
+    if is_adventurer == 0:
+        print(is_adventurer)
         npc['Type'] = 'Commoner'
         # Randomize this
         npc['Abilities'] = 'Str(10) Dex(10) Con(10) Int(10) Wis(10) Char(10)'
     else:
-        print(is_commoner)
+        print(is_adventurer)
+        npc['Type'] = 'Adventurer'
 
+        abilities = []
+        for pos in range(0, 6):
+            abilities.append(random.randint(8, 20))
 
+        npc['abilities'] = ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Char']
+        npc['Abilities'] = [stat for stat in abilities]
+        print(abilities)
+
+    # --------------------------------------------------------------------------
     # Returning the NPC
     return npc
+    # --------------------------------------------------------------------------
 
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -191,11 +198,28 @@ def generateNPC(gender, race, type):
 def main():
 
     # Get input on the type of NPC that is to be generated
-    type = input('Is the npc an adventurer? (y/n): ')
-    gender = input('Would you like the NPC to be (M)ale or (F)emale: ')
+
+    # Getting npc life status
+    is_adventurer = '-'
+    while ((is_adventurer.lower() != 'y') and (is_adventurer.lower() != 'n') and (is_adventurer != '')):
+        is_adventurer = input('Is the npc an is_adventurer? (y/n): ')
+
+    # Setting up life status for function
+    if is_adventurer == 'y':
+        is_adventurer = 1
+    elif is_adventurer == 'n':
+        is_adventurer = 0
+    else:
+        is_adventurer = random.randint(0, 1)
+
+    # Getting npc gender
+    gender = '-'
+    while ((gender.lower() != 'm') and (gender.lower() != 'f') and (gender != '')):
+        gender = input('Would you like the NPC to be (M)ale or (F)emale: ')
+
+    # Getting race choise
 
     choice_exists = False
-
     while choice_exists is False:
         print('What race would you like to choose? Leave empty for random: ')
         for race in norm_races:
@@ -220,7 +244,7 @@ def main():
 
     pos = 0
     while pos < npc_number:
-        generateNPC(gender, chosen_race, type)
+        generateNPC(gender, chosen_race, is_adventurer)
         print(f"""
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Name:       {npc['First Name']} {npc['Last Name']}
@@ -230,7 +254,8 @@ Age:        {npc['Age']}
 Height:     {npc['Height']}cm
 Weight:     {npc['Weight']}kg
 Type:       {npc['Type']}
-Abilities:  {npc['Abilities']}
+Abilities:  {npc['abilities']}
+            {npc['Abilities']}
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         """)
