@@ -18,7 +18,8 @@ npc = {
     'Race': '',
     'Age': '',
     'Height': '',
-    'Weight': ''
+    'Weight': '',
+    'Stats': '',
 }
 norm_races = {
     'Human': 90,
@@ -56,7 +57,7 @@ def get_name():
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-def generateNPC(gender, race):
+def generateNPC(gender, race, type):
 
     # Get a name for the npc
     get_name()
@@ -158,15 +159,40 @@ def generateNPC(gender, race):
     # Closing the connection
     conn.close()
 
+
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#                              ABILITY GENERATION
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    # Assigning the variable
+    if type.lower() == 'y':
+        is_commoner = False
+    else:
+        is_commoner = True
+
+    # Seeing if the npc is an adventurer
+    if is_commoner is True:
+        print(is_commoner)
+        npc['Type'] = 'Commoner'
+        # Randomize this
+        npc['Abilities'] = 'Str(10) Dex(10) Con(10) Int(10) Wis(10) Char(10)'
+    else:
+        print(is_commoner)
+
+
     # Returning the NPC
     return npc
 
 
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#                                   MAIN
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 def main():
 
     # Get input on the type of NPC that is to be generated
+    type = input('Is the npc an adventurer? (y/n): ')
     gender = input('Would you like the NPC to be (M)ale or (F)emale: ')
-    # TODO: Add a list to choose from in the future
 
     choice_exists = False
 
@@ -194,15 +220,18 @@ def main():
 
     pos = 0
     while pos < npc_number:
-        generateNPC(gender, chosen_race)
+        generateNPC(gender, chosen_race, type)
         print(f"""
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Name:   {npc['First Name']} {npc['Last Name']}
-Gender: {npc['Gender']}
-Race:   {npc['Race']}
-Age:    {npc['Age']}
-Height: {npc['Height']}cm
-Weight: {npc['Weight']}kg
+Name:       {npc['First Name']} {npc['Last Name']}
+Gender:     {npc['Gender']}
+Race:       {npc['Race']}
+Age:        {npc['Age']}
+Height:     {npc['Height']}cm
+Weight:     {npc['Weight']}kg
+Type:       {npc['Type']}
+Abilities:  {npc['Abilities']}
+
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         """)
         pos += 1
