@@ -20,7 +20,6 @@ npc = {
     'Height': '',
     'Weight': '',
     'Type': '',
-    'abilities': [],
     'Abilities': []
 }
 norm_races = {
@@ -171,19 +170,21 @@ def generateNPC(gender, race, is_adventurer):
     if is_adventurer == 0:
         print(is_adventurer)
         npc['Type'] = 'Commoner'
-        # Randomize this
+        # TODO: Randomize this
         npc['Abilities'] = 'Str(10) Dex(10) Con(10) Int(10) Wis(10) Char(10)'
     else:
         print(is_adventurer)
         npc['Type'] = 'Adventurer'
 
-        abilities = []
-        for pos in range(0, 6):
-            abilities.append(random.randint(8, 20))
+        abilities = ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Char']
+        for x in range(0, 6):
+            abilities[x] = f"{abilities[x]} ({random.randint(8, 20)})"
 
-        npc['abilities'] = ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Char']
-        npc['Abilities'] = [stat for stat in abilities]
-        print(abilities)
+        # npc['abilities'] = ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Char']
+        # npc['Abilities'] = [stat for stat in abilities]
+        npc['Abilities'] = abilities
+
+        # TODO: Add level of char depending on total stat roll
 
     # --------------------------------------------------------------------------
     # Returning the NPC
@@ -254,8 +255,7 @@ Age:        {npc['Age']}
 Height:     {npc['Height']}cm
 Weight:     {npc['Weight']}kg
 Type:       {npc['Type']}
-Abilities:  {npc['abilities']}
-            {npc['Abilities']}
+Abilities:  {npc['Abilities']}
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         """)
